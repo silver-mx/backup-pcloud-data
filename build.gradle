@@ -41,6 +41,18 @@ dependencyManagement {
     }
 }
 
+tasks.named('bootBuildImage') {
+    /*
+    The plugin uses packeto, which defaults to Java 17 support as explained
+    in https://paketo.io/docs/howto/java/#jvm-default-version. To build with Java 21
+    it is needed to specify to bump manually the buildpack version according to
+    https://github.com/paketo-buildpacks/bellsoft-liberica/releases */
+    buildpacks = ['gcr.io/paketo-buildpacks/java-native-image', 'gcr.io/paketo-buildpacks/bellsoft-liberica:10.4.2']
+    environment['BP_NATIVE_IMAGE'] = 'true'
+    environment['BP_JVM_VERSION'] = '21.0.0'
+    //environment['BP_NATIVE_IMAGE_BUILD_ARGUMENTS'] = '--verbose'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
